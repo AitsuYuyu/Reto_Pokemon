@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+}
+body{
+    text-align: center;
+}
+button{
+    broder-radius: 12px;
+    font-family: Arial;
+    margin:12px;
+    flex-direction: column;
+    border: solid #855249;
+}
+#searchButton{
+    border: solid #855249;
+
+}
+#myPikachu{
+    margin: 15px;
+    border: solid #855249;
+
+}
