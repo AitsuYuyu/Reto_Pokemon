@@ -1,8 +1,32 @@
+
+
 *{
     margin: 0;
 }
 body{
+    width: 100vw;
+    height: 100vh;
+}
+.titulo{
+    background-image: url(./recursos/pokeapi_256.png);
+    z-index: 90;
+    display: flex;
+    width: 40%;
+}
+.fondo{
     text-align: center;
+    background-image: url(./recursos/fondoP.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    position: fixed;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+.btn{
+    display: inline-block;
+    margin-top: 10%;
+
 }
 button{
     border-radius: 12px;
@@ -12,11 +36,7 @@ button{
     border: solid #855249;
 }
 #searchButton{
-    border: solid #855249;
-
-}
-#myPikachu{
-    margin: 15px;
-    border: solid #855249;
+   border: solid #855249;
+   margin: 15px;
 
 }
