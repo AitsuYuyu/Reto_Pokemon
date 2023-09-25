@@ -8,40 +8,7 @@ const searchInput = document.querySelector("#searchInput");
 const searchButton = document.querySelector("#searchButton");
 
 //id "pokemonContainer" almacen de la variable pokemonContainer
-const pokemonContainer = document.querySelector("#pokemonContainer");
-
-//-----------------------SECCION QUE EL TRAINER REALIZO -------------------------------
-//agrega un eventListener al id para el click
-// myPikachu.addEventListener("click", async () => {
-//     try {
-//         // solicitud de la API de Pokemon para obtener información de Pikachu
-//         let res = await (await fetch("https://pokeapi.co/api/v2/pokemon/pikachu")).json();
-
-//         // Obtiene la URL de la imagen frontal de Pikachu
-//         let img = res.sprites.front_default;
-
-//         // Muestra una ventana modal (usando SweetAlert2) con información de Pikachu
-//         Swal.fire({
-//             title: `${res.name}`, // muestra name pikachu
-//             text: 'Modal with a custom image.',
-//             imageUrl: `${(img) ? img : ''}`, // Muestra si la imagen de pikachu esta disponible
-//             html: `
-//                 ${res.stats.map(data => `
-//                     <input 
-//                         type="range"  
-//                         value="${data.base_stat}">
-//                     <label> 
-//                         <b>${data.base_stat}</b> 
-//                         ${data.stat.name}</label><br>
-//                 `).join("")}   
-//             `,
-//             imageWidth: "80%",
-//             imageHeight: "80%",
-//         });
-//     } catch (error) {
-//         console.error(error);
-//     }
-// });
+const pokElements = document.querySelector("#pokElements");
 
 // Agrega un event listener al elemento con id para el click
 searchButton.addEventListener("click", async () => {
@@ -57,10 +24,13 @@ searchButton.addEventListener("click", async () => {
     try {
         // Realiza una solicitud a la API de Pokemon utilizando el término de búsqueda
         const res = await (await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)).json();
-
+        //const vari = document.addEventListener(".trash")
         // Verifica si se encontró el nombre especificado
         if (res && res.name) {
             // Crea un botón con el nombre del Pokémon
+
+            /*const trasher = document.createElement("click");
+            trasher.textContent = vari.trash;*/
             const pokemonButton = document.createElement("button");
             pokemonButton.textContent = res.name;
             
@@ -87,7 +57,7 @@ searchButton.addEventListener("click", async () => {
             });
 
             // Agrega el botón del Pokémon al contenedor de Pokémon
-            pokemonContainer.appendChild(pokemonButton);
+            pokElements.appendChild(pokemonButton);
         } else {
             alert("Pokémon no encontrado.");
         }
