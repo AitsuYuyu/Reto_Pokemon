@@ -96,3 +96,7 @@ searchButton.addEventListener("click", async () => {
         alert("Parece que no se encuentra o esta mal escrito este nombre....");
     }
 });
+
+
+
+
