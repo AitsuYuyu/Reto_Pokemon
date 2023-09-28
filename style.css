@@ -7,6 +7,7 @@ body{
     width: 100vw;
     height: 100vh;
     text-align: center;
+    color: black;
 }
 button{
     border-radius: 12px;
@@ -54,7 +55,22 @@ button{
 img{
     width: 20%;
 }
+@media (max-width: 800px){
+    img{
+        width: 50%;
+    }
+}
 .contieneRangos{
     width: 100vw;
     height: 4vh;
 }
+.stat-input{
+    border-top: 2px;
+    width: 15%;
+
+}
+@media (max-width: 800px) {
+    .stat-input{
+        width: 40%;
+    }
+  }
