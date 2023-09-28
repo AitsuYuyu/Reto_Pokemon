@@ -14,6 +14,7 @@ button{
     margin:12px;
     flex-direction: column;
     border: solid #855249;
+    background-color: transparent;
 }
 .titulo{
     background-image: url(./recursos/pokeapi_256.png);
@@ -39,4 +40,21 @@ button{
    margin: 15px;
 
 }
-/* miau */
+#searchInput{
+    background-color: rgb(216, 238, 156, 0.5);
+    border: solid #8d4d3d;
+    border-radius: 8px;
+    color: black;
+}
+.contieneImg{
+    width: 100vw;
+    height: 50;
+    background-size: cover;
+}
+img{
+    width: 20%;
+}
+.contieneRangos{
+    width: 100vw;
+    height: 4vh;
+}
