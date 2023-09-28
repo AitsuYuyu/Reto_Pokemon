@@ -67,5 +67,7 @@
 
 
 
-*No dudes en desirme que errores tiene!*
+*No dudes en desirme que errores tiene!
+
+*
 *Contacto en mi perfil ;D*
