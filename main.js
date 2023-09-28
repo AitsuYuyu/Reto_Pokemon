@@ -4,23 +4,18 @@ const searchButton = document.querySelector("#searchButton");
 const pokElements = document.querySelector("#pokElements");
 
 async function getPokemonFromAPI(id) {
-    try {
-        const response = await fetch(`https://65124103b8c6ce52b395763c.mockapi.io/pokemon/${id}`);
-        if (response.ok) {
-            return await response.json();
-        } else {
-            console.error("Error al obtener el Pokémon desde la API personal.");
-            return null;
-        }
-    } catch (error) {
-        console.error("Error al obtener el Pokémon desde la API personal:", error);
-        return null;
-    }
+    const response = await (await fetch(`https://65124103b8c6ce52b395763c.mockapi.io/pokemon`)).json();
+    let res = undefined; 
+    response.forEach((data)=>{
+        let {name} = data;
+        if(name == id) res = data;
+    })
+   return res;
 }
 
 async function saveEditedPokemonToAPI(id, editedData) {
     try {
-        const response = await fetch(`https://65124103b8c6ce52b395763c.mockapi.io/pokemon/${id}`, {
+        const response = await fetch(`https://65124103b8c6ce52b395763c.mockapi.io/pokemon${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -69,11 +64,13 @@ searchButton.addEventListener("click", async () => {
                 const editedPokemonData = await getPokemonFromAPI(pokemonId);
 
                 const modalHTML = `
-                    <div>
+                    <div class="fondoTarjetas">
                         <h2>${pokemonData.name}</h2>
-                        <img src="${pokemonData.sprites.front_default || ''}" alt="Imagen del Pokémon">
+                        <div class="contieneImg">
+                            <img src="${pokemonData.sprites.front_default || ''}" alt="Imagen del Pokémon">
+                        </div>
                         ${pokemonData.stats.map(stat => `
-                            <div>
+                            <div class="contieneRangos">
                                 <input type="range" value="${stat.base_stat}" class="stat-input" data-stat-name="${stat.stat.name}">
                                 <span class="stat-value">${stat.base_stat}</span>
                             </div>
