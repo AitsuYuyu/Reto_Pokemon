@@ -1,72 +1,129 @@
-//id "myPikachu" almacen de la variable myPikachu
 let myPikachu = document.querySelector("#myPikachu");
-
-//id "searchInput" almacen de la variable searchInput
 const searchInput = document.querySelector("#searchInput");
-
-// id "searchButton" almacen de la variable searchButton
 const searchButton = document.querySelector("#searchButton");
-
-//id "pokemonContainer" almacen de la variable pokemonContainer
 const pokElements = document.querySelector("#pokElements");
 
-// Agrega un event listener al elemento con id para el click
+async function getPokemonFromAPI(id) {
+    try {
+        const response = await fetch(`https://65124103b8c6ce52b395763c.mockapi.io/pokemon/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error("Error al obtener el Pokémon desde la API personal.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error al obtener el Pokémon desde la API personal:", error);
+        return null;
+    }
+}
+
+async function saveEditedPokemonToAPI(id, editedData) {
+    try {
+        const response = await fetch(`https://65124103b8c6ce52b395763c.mockapi.io/pokemon/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editedData),
+        });
+
+        if (response.ok) {
+            console.log("Cambios guardados correctamente en la API personal.");
+        } else {
+            console.error("Error al guardar los cambios en la API personal.");
+        }
+    } catch (error) {
+        console.error("Error al guardar los cambios en la API personal:", error);
+    }
+}
+
+function updateStatValueElements() {
+    const statInputs = document.querySelectorAll(".stat-input");
+    statInputs.forEach(input => {
+        const statValueElement = input.nextElementSibling;
+        statValueElement.textContent = input.value;
+    });
+}
+
 searchButton.addEventListener("click", async () => {
-    // Obtiene el valor del campo de entrada de búsqueda
     const searchTerm = searchInput.value.trim().toLowerCase();
-    
-    // Verifica no se ha escrito nada o si esta vacio
+
     if (searchTerm === "") {
         alert("Ingrese un nombre de Pokémon válido.");
         return;
     }
-    
-    try {
-        // Realiza una solicitud a la API de Pokemon utilizando el término de búsqueda
-        const res = await (await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)).json();
-        //const vari = document.addEventListener(".trash")
-        // Verifica si se encontró el nombre especificado
-        if (res && res.name) {
-            // Crea un botón con el nombre del Pokémon
 
-            /*const trasher = document.createElement("click");
-            trasher.textContent = vari.trash;*/
+    try {
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
+
+        if (res.ok) {
+            const pokemonData = await res.json();
+
             const pokemonButton = document.createElement("button");
-            pokemonButton.textContent = res.name;
-            
-            //---aqui hace el mismo proceso que el trainer realizo durante clase-----
-            // Agrega un event listener al botón del Pokémon para mostrar una ventana modal con su información
-            pokemonButton.addEventListener("click", () => {
+            pokemonButton.textContent = pokemonData.name;
+
+            pokemonButton.addEventListener("click", async () => {
+                const pokemonId = pokemonData.name;
+
+                const editedPokemonData = await getPokemonFromAPI(pokemonId);
+
+                const modalHTML = `
+                    <div>
+                        <h2>${pokemonData.name}</h2>
+                        <img src="${pokemonData.sprites.front_default || ''}" alt="Imagen del Pokémon">
+                        ${pokemonData.stats.map(stat => `
+                            <div>
+                                <input type="range" value="${stat.base_stat}" class="stat-input" data-stat-name="${stat.stat.name}">
+                                <span class="stat-value">${stat.base_stat}</span>
+                            </div>
+                        `).join("")}
+                        <button id="editButton">Editar</button>
+                    </div>
+                `;
+
                 Swal.fire({
-                    title: `${res.name}`, // Muestra name
-                    text: 'Modal with a custom image.',
-                    imageUrl: res.sprites.front_default || '', // Muestra la imagen (si esta disponible)
-                    html: `
-                        ${res.stats.map(data => `
-                            <input 
-                                type="range"  
-                                value="${data.base_stat}">
-                            <label> 
-                                <b>${data.base_stat}</b> 
-                                ${data.stat.name}</label><br>
-                        `).join("")}   
-                    `,
-                    imageWidth: "80%",
-                    imageHeight: "80%",
+                    html: modalHTML,
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                }).then((result) => {
+                    updateStatValueElements(); 
+
+                    const editButton = document.getElementById("editButton");
+                    if (editButton) {
+                        editButton.addEventListener("click", async () => {
+                            const editedStats = [];
+                            const statInputs = document.querySelectorAll(".stat-input");
+                            statInputs.forEach(input => {
+                                const statName = input.getAttribute("data-stat-name");
+                                const baseStat = parseInt(input.value);
+                                editedStats.push({ stat: { name: statName }, base_stat: baseStat });
+                            });
+
+                            await saveEditedPokemonToAPI(pokemonId, {
+                                ...editedPokemonData,
+                                stats: editedStats,
+                            });
+
+                            Swal.update({ text: "Cambios guardados correctamente.", icon: "success" });
+                        });
+                    }
+                });
+
+                const statInputs = document.querySelectorAll(".stat-input");
+                statInputs.forEach(input => {
+                    input.addEventListener("input", () => {
+                        const statValueElement = input.nextElementSibling;
+                        statValueElement.textContent = input.value;
+                    });
                 });
             });
-
-            // Agrega el botón del Pokémon al contenedor de Pokémon
             pokElements.appendChild(pokemonButton);
         } else {
             alert("Pokémon no encontrado.");
         }
     } catch (error) {
-        console.error(error);
-        alert("Parece que no se encuentra o esta mal escrito este nombre....");
+        console.error("Error al buscar Pokémon:", error);
+        alert("Ha ocurrido un error al buscar el Pokémon.");
     }
 });
-
-
-
-
