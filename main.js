@@ -1,9 +1,14 @@
+
 const searchInput = document.querySelector("#searchInput");
 const searchButton = document.querySelector("#searchButton");
 const pokElements = document.querySelector("#pokElements");
+const url ="http://127.0.0.1:5050/pokemon"
+const pokeApiUrl ="https://pokeapi.co/api/v2/pokemon/"
+
+
 
 async function getPokemonFromAPI(id) {
-    const response = await fetch(`http://127.0.2.1:5030/pokemon/${id}`);
+    const response = await fetch(url`${id}`);
     if (response.ok) {
         const data = await response.json();
         return data;
@@ -14,7 +19,7 @@ async function getPokemonFromAPI(id) {
 
 async function saveEditedPokemonToAPI(id, editedData) {
     try {
-        const response = await fetch(`http://127.0.1.1:5040/pokemon/${id}`, {
+        const response = await fetch(url`${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -23,12 +28,13 @@ async function saveEditedPokemonToAPI(id, editedData) {
         });
 
         if (response.ok) {
-            console.log("Cambios guardados correctamente en la API personal.");
+            console.log("Cambios guardados correctamente en el json.");
         } else {
-            console.error("Error al guardar los cambios en la API personal.");
+            console.error("Error al guardar los cambios en el json.");
         }
     } catch (error) {
-        console.error("Error al guardar los cambios en la API personal:", error);
+        console.error("Error en saveEditedPokemonToAPI:", error);
+        throw error; 
     }
 }
 
